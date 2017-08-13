@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>明天-昨天</title>
+    <script src="{{static_url('jquery.min.js')}}"></script>
+</head>
+<body>
+    <div id="contents" style="height:500px ;overflow:auto;"></div>
+    <div>
+        <textarea id="msg"></textarea>
+        <a href="javascript:;" onclick="SendMsg()">发送</a>
+
+    </div>
+
+    <!--<script src="{{static_url('jquery.min.js')}}"></script>-->
+    <!--<script type="text/javascript">-->
+    <script>
+        var ws=new WebSocket('ws://服务器的ip地址:8000/chat');
+        alert("欢迎来到未来时空");
+        ws.onmessage=function (e) {
+            $("#contents").append("<p>" + e.data + "</p>");
+            $('#contents').animate({scrollTop:$('#contents')[0].scrollHeight},200)
+        };
+        function SendMsg(){
+            var msg=$('#msg');
+            ws.send(msg.val());
+            msg.val('');
+            $('#contents').stop().animate({scrollTop:$('#contents')[0].scrollHeight},1)
+        }
+    </script>
+</body>
+</html>
